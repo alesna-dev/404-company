@@ -33,7 +33,7 @@ function ImagePreview({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  image: string | null;
+  image: string | null | (string | null)[];
 }) {
   return (
     <Dialog
@@ -57,13 +57,32 @@ function ImagePreview({
                   <div className="flex items-center justify-center w-full h-screen">
                     <TransformComponent>
                       {image ? (
-                        <Image
-                          src={image}
-                          height={800}
-                          width={800}
-                          alt={"image carousel"}
-                          className="max-h-[768px]"
-                        />
+                        Array.isArray(image) ? (
+                          image.map((item) => {
+                            if (!item) {
+                              return;
+                            }
+
+                            return (
+                              <Image
+                                key={item}
+                                src={item}
+                                height={800}
+                                width={800}
+                                alt={"image carousel"}
+                                className="max-h-[768px]"
+                              />
+                            );
+                          })
+                        ) : (
+                          <Image
+                            src={image}
+                            height={800}
+                            width={800}
+                            alt={"image carousel"}
+                            className="max-h-[768px]"
+                          />
+                        )
                       ) : (
                         "Invalid Image"
                       )}

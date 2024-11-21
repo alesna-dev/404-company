@@ -1,22 +1,35 @@
-import getProducts from "@/actions/get-products";
+"use client";
+
 import Label from "./Label";
 import ProductCard from "./ProductCard";
-import getProductImages from "@/actions/get-product-images";
+import { TProductListProps, TProductProps } from "@/types/global.types";
+import { useEffect, useState } from "react";
+import ImagePreview from "./ImagePreview";
 
-const ProductList = async () => {
-  const [products, productImages] = await Promise.all([
-    getProducts(),
-    getProductImages(),
-  ]);
+const ProductList = ({ products }: { products: TProductListProps }) => {
+  const [selectedProducts, setSelectedProducts] = useState<(string | null)[]>(
+    []
+  );
+  const [isOpen, setIsOpen] = useState(false);
 
-  const findProductImages = (id: string) => {
-    return productImages?.find((item) => item.id.includes(id))?.image || null;
+  const onSelectProduct = (product: TProductProps) => {
+    const newProducts = [...selectedProducts];
+
+    newProducts.push(product.image);
+
+    setSelectedProducts(newProducts);
   };
 
-  const mapProductImagesToProduct = products.map((item) => ({
-    ...item,
-    image: findProductImages(item.id),
-  }));
+  const handleClose = () => {
+    setSelectedProducts([]);
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    if (selectedProducts.length === 2) {
+      setIsOpen(true);
+    }
+  }, [selectedProducts.length]);
 
   return (
     <section id="products" className="flex flex-col gap-4">
@@ -31,15 +44,22 @@ const ProductList = async () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {mapProductImagesToProduct?.map((product) => (
+        {products?.map((product) => (
           <ProductCard
             key={product.id}
             id={product.id}
             image={product.image}
             name={product.name}
+            onClick={() => onSelectProduct(product)}
           />
         ))}
       </div>
+
+      <ImagePreview
+        isOpen={isOpen}
+        image={selectedProducts}
+        onClose={handleClose}
+      />
     </section>
   );
 };

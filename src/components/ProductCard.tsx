@@ -9,9 +9,10 @@ export type TProductCard = {
   name: string;
   image: string | null;
   id: string;
+  onClick: () => void;
 };
 
-const ProductCard = ({ name, image, id }: TProductCard) => {
+const ProductCard = ({ name, image, id, onClick }: TProductCard) => {
   const [open, setOpen] = useState(false);
 
   const onClose = () => setOpen(false);
@@ -40,9 +41,13 @@ const ProductCard = ({ name, image, id }: TProductCard) => {
 
         <div className="flex items-center gap-4 h-14 p-4 ">
           <div className="flex-1">
-            <span className="text-slate-100 font-semibold line-clamp-2 text-lg">
+            <button
+              type="button"
+              className="text-slate-100 font-semibold line-clamp-2 text-lg"
+              onClick={onClick}
+            >
               {name || `Product ${id}`}
-            </span>
+            </button>
             <div className="text-slate-400 text-xs ">Product id {id}</div>
           </div>
           <div>
