@@ -58,22 +58,24 @@ function ImagePreview({
                     <TransformComponent>
                       {image ? (
                         Array.isArray(image) ? (
-                          image.map((item) => {
-                            if (!item) {
-                              return;
-                            }
+                          <div className="flex items-center gap-4">
+                            {image.map((item) => {
+                              if (!item) {
+                                return;
+                              }
 
-                            return (
-                              <Image
-                                key={item}
-                                src={item}
-                                height={800}
-                                width={800}
-                                alt={"image carousel"}
-                                className="max-h-[768px]"
-                              />
-                            );
-                          })
+                              return (
+                                <Image
+                                  key={item}
+                                  src={item}
+                                  height={800}
+                                  width={800}
+                                  alt={"image carousel"}
+                                  className="max-h-[768px]"
+                                />
+                              );
+                            })}
+                          </div>
                         ) : (
                           <Image
                             src={image}
